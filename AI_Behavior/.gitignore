@@ -1,0 +1,11 @@
+.*
+
+*.
+*.sln
+*.csproj
+*.userprefs
+
+obj
+Library
+
+!.gitignore

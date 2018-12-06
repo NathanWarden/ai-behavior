@@ -1,0 +1,10 @@
+{
+    "name": "AIBehaviorNav_Editor",
+    "references": [
+        "AIBehavior"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

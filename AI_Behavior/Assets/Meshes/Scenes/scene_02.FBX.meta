@@ -1,0 +1,74 @@
+fileFormatVersion: 2
+guid: 9e804b2eef2d18947843fef6d6f5366a
+ModelImporter:
+  fileIDToRecycleName:
+    4300000: scene_objects_22
+    4300002: scene_objects_23
+    4300004: scene_objects_24
+    4300006: scene_objects_26
+    4300008: scene_objects_27
+    4300010: scene_objects_28
+    4300012: scene_objects_30
+    4300014: scene_objects_31
+    4300016: scene_objects_32
+    4300018: scene_objects_34
+    4300020: scene_objects_35
+    4300022: scene_objects_36
+    4300024: scene_objects_38
+    4300026: scene_objects_39
+    4300028: scene_objects_40
+    4300030: scene_2
+    4300032: scene_02
+  serializedVersion: 10
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 1
+  animations:
+    generateAnimations: 3
+    bakeSimulation: 0
+    splitAnimations: 0
+    animationCompression: 0
+    animationRotationError: 0.500000
+    animationPositionError: 0.500000
+    animationScaleError: 0.500000
+    animationWrapMode: 0
+    clipAnimations: []
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1.500000
+    meshCompression: 0
+    addColliders: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    meshOptimization: 4
+    secondaryUVAngleDistortion: 8.000000
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88.000000
+    secondaryUVPackMargin: 4.000000
+  tangentSpace:
+    normalSmoothAngle: 60.000000
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  textMetaNamesToFileIDs:
+    //RootNode:
+      data:
+        first: 1
+        second: a0860100
+      data:
+        first: 4
+        second: 801a0600
+      data:
+        first: 23
+        second: 60182300
+      data:
+        first: 33
+        second: a05a3200
+      data:
+        first: 64
+        second: 00a86100
+      data:
+        first: 111
+        second: 605fa900
