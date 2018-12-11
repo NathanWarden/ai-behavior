@@ -31,7 +31,7 @@ namespace AIBehavior
 
 			if (changeTag) 
 			{
-				fsm.tag = deadTag;
+				transform.parent.tag = deadTag;
 			}
 
 			if (componentsToDestroy.Length > 0) 
@@ -41,7 +41,7 @@ namespace AIBehavior
 
 			if (destroyColliders) 
 			{
-				DestroyColliders (fsm);
+				DestroyColliders ();
 			}
 		}
 
@@ -68,9 +68,9 @@ namespace AIBehavior
 			return "Dead";
 		}
 
-		void DestroyColliders (AIBehaviors fsm)
+		void DestroyColliders ()
 		{
-			Collider[] colliders = fsm.GetComponentsInChildren<Collider>();
+			Collider[] colliders = gameObject.transform.parent.GetComponentsInChildren<Collider>();
 
 			foreach ( Collider collider in colliders )
 			{

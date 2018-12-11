@@ -14,13 +14,19 @@ namespace AIBehavior
 		protected Bounds viewBounds;
 
 
-		protected override void Init(AIBehaviors fsm)
+		protected override void Awake ()
 		{
+			base.Awake ();
+
 			if ( updateViewBounds == CachePoint.Awake )
 			{
-				viewBounds = GetCombinedBounds(fsm.aiTransform);
+				viewBounds = GetCombinedBounds(transform.parent);
 			}
+		}
 
+
+		protected override void Init(AIBehaviors fsm)
+		{
 			if ( updateViewBounds == CachePoint.StateChanged )
 			{
 				viewBounds = GetCombinedBounds(fsm.aiTransform);

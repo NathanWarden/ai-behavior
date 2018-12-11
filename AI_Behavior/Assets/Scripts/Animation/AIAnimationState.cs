@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AIBehavior
 {
-	public class AIAnimationState : ScriptableObject
+	public class AIAnimationState : MonoBehaviour
 	{
 		public new string name = "Untitled";
 

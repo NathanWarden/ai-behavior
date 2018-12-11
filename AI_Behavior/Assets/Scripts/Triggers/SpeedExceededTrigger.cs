@@ -37,7 +37,7 @@ namespace AIBehavior
 			float time = Time.time;
 			Transform target;
 
-			if ( SpeedExceededForTarget(fsm.aiTransform, out target, time) )
+			if ( SpeedExceededForTarget(out target, time) )
 			{
 				// Set target to seek state if bool checked
 				if ( setTransformAsSeekTarget )
@@ -55,7 +55,7 @@ namespace AIBehavior
 		}
 
 
-		public bool SpeedExceededForTarget(Transform aiTfm, out Transform target, float time)
+		public bool SpeedExceededForTarget(out Transform target, float time)
 		{
 			Transform[] tfms = objectFinder.GetTransforms();
 			float sqrSpeedThreshold = speedThreshold * speedThreshold;
@@ -69,8 +69,9 @@ namespace AIBehavior
 
 				if ( transformPreviousPositions.ContainsKey(tfm) )
 				{
+
 					// Is the object within the max distanceFromAI?
-					if ( (curPosition - aiTfm.position).sqrMagnitude < sqrMaxDistanceFromAI )
+					if ( (curPosition - transform.position).sqrMagnitude < sqrMaxDistanceFromAI )
 					{
 						Vector3 diffVector = curPosition - transformPreviousPositions[tfm];
 

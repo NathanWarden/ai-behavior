@@ -73,7 +73,7 @@ namespace AIBehavior
 		public bool HandleEvaluate(AIBehaviors fsm)
 		{
 			bool invert = CanInvertResult() && invertResult;
-			bool triggerResult = invert ? !Evaluate(fsm) : Evaluate(fsm);
+			bool triggerResult = this.enabled && (invert ? !Evaluate(fsm) : Evaluate(fsm));
 			bool result = triggerResult && CheckSubTriggers(fsm);
 
 			objectFinder.CacheTransforms(CachePoint.EveryFrame);

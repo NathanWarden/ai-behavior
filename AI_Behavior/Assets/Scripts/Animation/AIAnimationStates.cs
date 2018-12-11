@@ -10,6 +10,8 @@ namespace AIBehavior
 
 		public AIAnimationState[] states = new AIAnimationState[1];
 
+		public GameObject animationStatesGameObject = null;
+
 		private Dictionary<string, AIAnimationState> statesDictionary = new Dictionary<string, AIAnimationState>();
 
 

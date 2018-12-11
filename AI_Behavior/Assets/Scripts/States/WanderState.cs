@@ -65,7 +65,7 @@ namespace AIBehavior
 			}
 
 			// Target reached
-			if (Vector3.SqrMagnitude (fsm.aiTransform.position - targetPosition) < sqrDistanceToTargetThreshold) 
+			if (Vector3.SqrMagnitude (transform.position - targetPosition) < sqrDistanceToTargetThreshold) 
 			{
 				HandleTargetReached (fsm);
 			}
@@ -103,7 +103,8 @@ namespace AIBehavior
 		Vector3 GetTargetPoint(AIBehaviors fsm)
 		{
 			Vector3 sightPoint = fsm.sightTransform.position;
-			Vector3 newTarget = fsm.aiTransform.position;
+		
+			Vector3 newTarget = transform.position;
 
 			int tries = 10;
 			float distance = 5.0f;
@@ -113,24 +114,23 @@ namespace AIBehavior
 			{
 				for (int j = tries; j > 0; j--) 
 				{
-					if (FindAPoint (fsm.aiTransform, sightPoint, distance, out newTarget)) 
+					if (FindAPoint (sightPoint, distance, out newTarget)) 
 					{
 						return newTarget;
 					}
 				}
 				distance -= 2;
 			}
-
 			// If finally not found a point rotate to another direction
-			fsm.aiTransform.Rotate(0, 90, 0);
+			transform.Rotate(0, 90, 0);
 
 			return newTarget;
 		}
 
-		bool FindAPoint(Transform aiTfm, Vector3 start, float distance, out Vector3 newPoint)
+		bool FindAPoint(Vector3 start, float distance, out Vector3 newPoint)
 		{
-			Vector3 sightdirection = aiTfm.forward * distance + Vector3.down;
-			sightdirection += aiTfm.right*Random.Range(-10,10);
+			Vector3 sightdirection = transform.forward * distance + Vector3.down;
+			sightdirection += transform.right*Random.Range(-10,10);
 
 			//Debug.DrawRay (start, sightdirection*10, Color.red, 5);
 			RaycastHit hit;
@@ -141,8 +141,8 @@ namespace AIBehavior
 					// If exceeding the maxDistance from the anchorPoint, turn to another rotation
 					if (Vector3.Distance(hit.point, anchorPoint.position) > maxDistanceFromAnchor) 
 					{
-						aiTfm.Rotate(0, 90, 0);
-						newPoint = aiTfm.position;
+						transform.Rotate(0, 90, 0);
+						newPoint = transform.position;
 						return false;
 					}
 
@@ -151,8 +151,7 @@ namespace AIBehavior
 				} 
 			}
 
-			newPoint = aiTfm.position;
-
+			newPoint = transform.position;
 			return false;
 		}
 
@@ -209,7 +208,7 @@ namespace AIBehavior
 			{
 				GUILayout.Label ("Debug:", EditorStyles.boldLabel);
 				GUILayout.BeginVertical(GUI.skin.box);
-				GUILayout.Label("Distance to target: " + (fsm.aiTransform.position - targetPosition).magnitude.ToString(), EditorStyles.boldLabel);
+				GUILayout.Label("Distance to target: " + (transform.position - targetPosition).magnitude.ToString(), EditorStyles.boldLabel);
 				GUILayout.EndVertical();
 			}
 		}

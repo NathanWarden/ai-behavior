@@ -17,15 +17,26 @@ namespace AIBehaviorEditor
 		static bool gotFoldoutValue = false;
 
 
-		public static void DrawAnimationFields(SerializedObject stateObject, AIAnimationStates animStatesComponent, bool usesMultipleAnimations)
+		public static void OnInspectorEnabled(SerializedObject m_ParentObject, SerializedObject m_StateObject)
 		{
-			SerializedProperty statesProperty = stateObject.FindProperty("animationStates");
+			AssignAnimationStatesComponent(m_StateObject);
+		}
+
+
+		public static void DrawAnimationFields(SerializedObject m_StateObject, bool usesMultipleAnimations)
+		{
+			SerializedProperty m_animationStates = m_StateObject.FindProperty("animationStatesComponent");
+			SerializedProperty statesProperty = m_StateObject.FindProperty("animationStates");
 			int arraySize = statesProperty.arraySize;
+			AIAnimationStates animStatesComponent;
 			AIBehaviorsStyles styles = new AIBehaviorsStyles();
 			bool newFoldoutValue;
 			bool hadNullAnimation = false;
 
 			const string foldoutValueKey = "AIBehaviors_AnimationsFoldout";
+
+			AssignAnimationStatesComponent(m_StateObject);
+			animStatesComponent = m_animationStates.objectReferenceValue as AIAnimationStates;
 
 			if ( !gotFoldoutValue )
 			{
@@ -51,7 +62,6 @@ namespace AIBehaviorEditor
 				{
 					if ( animStatesComponent != null )
 					{
-						Debug.Log(animStatesComponent.states.Length);
 						statesProperty.GetArrayElementAtIndex(i).objectReferenceValue = animStatesComponent.states[0];
 						hadNullAnimation = true;
 					}
@@ -60,17 +70,17 @@ namespace AIBehaviorEditor
 
 			if ( !foldoutValue || hadNullAnimation )
 			{
-				stateObject.ApplyModifiedProperties();
+				m_StateObject.ApplyModifiedProperties();
 				return;
 			}
 
 			// Is the component assigned?
-			if ( animStatesComponent != null )
+			if ( m_animationStates.objectReferenceValue != null && animStatesComponent != null )
 			{
 				GUILayout.BeginVertical(GUI.skin.box);
 
 				AIAnimationState[] states = new AIAnimationState[arraySize];
-				string[] animationStateNames = GetAnimationStateNames(stateObject, animStatesComponent);
+				string[] animationStateNames = GetAnimationStateNames(m_StateObject);
 
 				if ( animStatesComponent.states.Length == 0 )
 				{
@@ -109,7 +119,7 @@ namespace AIBehaviorEditor
 							GUILayout.BeginHorizontal();
 							{
 								curIndex = EditorGUILayout.Popup(curIndex, animationStateNames, EditorStyles.popup);
-								stateObject.FindProperty(string.Format(kArrayData, i)).objectReferenceValue = animStatesComponent.states[curIndex];
+								m_StateObject.FindProperty(string.Format(kArrayData, i)).objectReferenceValue = animStatesComponent.states[curIndex];
 
 								if ( usesMultipleAnimations )
 								{
@@ -134,7 +144,7 @@ namespace AIBehaviorEditor
 									GUI.enabled = arraySize > 1;
 									if ( GUILayout.Button(styles.blankContent, styles.removeStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
 									{
-										AIBehaviorsAssignableObjectArray.RemoveObjectAtIndex(stateObject, i, "animationStates");
+										AIBehaviorsAssignableObjectArray.RemoveObjectAtIndex(m_StateObject, i, "animationStates");
 										GUILayout.EndHorizontal();
 										break;
 									}
@@ -155,12 +165,30 @@ namespace AIBehaviorEditor
 				GUILayout.EndVertical();
 			}
 
-			stateObject.ApplyModifiedProperties();
+			m_StateObject.ApplyModifiedProperties();
 		}
 
 
-		public static string[] GetAnimationStateNames(SerializedObject m_StateObject, AIAnimationStates animStatesComponent)
+		public static void AssignAnimationStatesComponent(SerializedObject m_StateObject)
 		{
+			SerializedProperty prop = m_StateObject.FindProperty("animationStatesComponent");
+			GameObject parentObject = (m_StateObject.targetObject as BaseState).transform.parent.gameObject;
+
+			if ( prop.objectReferenceValue == null )
+			{
+				if ( parentObject != null )
+				{
+					prop.objectReferenceValue = parentObject.GetComponent<AIAnimationStates>();
+					m_StateObject.ApplyModifiedProperties();
+				}
+			}
+		}
+
+
+		public static string[] GetAnimationStateNames(SerializedObject m_StateObject)
+		{
+			SerializedProperty m_animationStates = m_StateObject.FindProperty("animationStatesComponent");
+			AIAnimationStates animStatesComponent = m_animationStates.objectReferenceValue as AIAnimationStates;
 			bool animStatesNull = animStatesComponent == null;
 			int animNamesSize = animStatesNull ? 0 : animStatesComponent.states.Length;
 			string[] animationStateNames = new string[animNamesSize];

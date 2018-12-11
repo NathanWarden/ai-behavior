@@ -106,7 +106,7 @@ namespace AIBehavior
 
 				for ( int i = 0; i < fleeToObjects.Length; i++ )
 				{
-					Vector3 dist = fleeToObjects[i].transform.position - fsm.aiTransform.position;
+					Vector3 dist = fleeToObjects[i].transform.position - this.transform.position;
 
 					if ( dist.sqrMagnitude < nearestSqrDistance )
 					{

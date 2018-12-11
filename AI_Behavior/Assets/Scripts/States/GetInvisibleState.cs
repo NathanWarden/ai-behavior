@@ -24,9 +24,8 @@ namespace AIBehavior
 		{
 			fsm.PlayAudio();
 
-			Transform root = fsm.aiTransform.root;
-			aiRenderers = root.GetComponentsInChildren<Renderer> ();
-			aiColliders = root.GetComponentsInChildren<Collider> ();
+			aiRenderers = transform.root.GetComponentsInChildren<Renderer> ();
+			aiColliders = transform.root.GetComponentsInChildren<Collider> ();
 
 			foreach (Renderer aiRenderer in aiRenderers) 
 			{
@@ -46,7 +45,7 @@ namespace AIBehavior
 			else 
 				fsm.ChangeActiveState (goToState);
 
-			fsm.StartCoroutine(EndInvisibility(fsm));
+			StartCoroutine(EndInvisibility(fsm));
 		}
 
 

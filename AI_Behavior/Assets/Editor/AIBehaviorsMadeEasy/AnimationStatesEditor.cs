@@ -19,6 +19,7 @@ namespace AIBehaviorEditor
 
 		Transform transform;
 		AIAnimationStates animStates;
+		GameObject statesGameObject;
 
 		AIBehaviorsStyles styles;
 
@@ -30,10 +31,30 @@ namespace AIBehaviorEditor
 			m_Object = new SerializedObject(target);
 			animationStatesProp = m_Object.FindProperty("states");
 			m_AnimationStatesCount = m_Object.FindProperty(kArraySize);
-			ClearNullAnimationStates();
 
 			animStates = m_Object.targetObject as AIAnimationStates;
 			transform = animStates.transform;
+
+			InitStatesGameObject();
+		}
+
+
+		void InitStatesGameObject()
+		{
+			SerializedProperty m_Prop = m_Object.FindProperty("animationStatesGameObject");
+
+			statesGameObject = m_Prop.objectReferenceValue as GameObject;
+
+			if ( statesGameObject == null )
+			{
+				statesGameObject = new GameObject("AnimationStates");
+				m_Prop.objectReferenceValue = statesGameObject;
+
+				statesGameObject.transform.parent = transform;
+				statesGameObject.transform.localPosition = Vector3.zero;
+
+				m_Object.ApplyModifiedProperties();
+			}
 		}
 
 
@@ -92,7 +113,7 @@ namespace AIBehaviorEditor
 				if ( GUILayout.Button(styles.blankContent, styles.addStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
 				{
 					animationStatesProp.InsertArrayElementAtIndex(i);
-					animationStatesProp.GetArrayElementAtIndex(i+1).objectReferenceValue = ScriptableObject.CreateInstance<AIAnimationState>();
+					animationStatesProp.GetArrayElementAtIndex(i+1).objectReferenceValue = statesGameObject.AddComponent<AIAnimationState>();
 				}
 
 				GUI.enabled = arraySize > 1;
@@ -124,45 +145,10 @@ namespace AIBehaviorEditor
 			if ( arraySize == 0 )
 			{
 				m_Object.FindProperty(kArraySize).intValue++;
-				animationStatesProp.GetArrayElementAtIndex(0).objectReferenceValue = ScriptableObject.CreateInstance<AIAnimationState>();
+				animationStatesProp.GetArrayElementAtIndex(0).objectReferenceValue = statesGameObject.AddComponent<AIAnimationState>();
 			}
 
 			EditorGUILayout.Separator();
-
-			m_Object.ApplyModifiedProperties();
-		}
-
-
-		void ClearNullAnimationStates()
-		{
-			AIAnimationStates animStatesComponent = target as AIAnimationStates;
-			List<AIAnimationState> statesList = new List<AIAnimationState>();
-
-			foreach (AIAnimationState state in animStatesComponent.states)
-			{
-				if (state != null)
-				{
-					statesList.Add(state);
-				}
-			}
-
-			if (statesList.Count == 0)
-			{
-				animStatesComponent.states = new AIAnimationState[0];
-				statesList.Add(ScriptableObject.CreateInstance<AIAnimationState>());
-			}
-
-			if (statesList.Count != animStatesComponent.states.Length)
-			{
-				Debug.LogError("Size mismatch");
-
-				animationStatesProp.arraySize = statesList.Count;
-
-				for (int i = 0; i < statesList.Count; i++)
-				{
-					animationStatesProp.GetArrayElementAtIndex(i).objectReferenceValue = statesList[i];
-				}
-			}
 
 			m_Object.ApplyModifiedProperties();
 		}

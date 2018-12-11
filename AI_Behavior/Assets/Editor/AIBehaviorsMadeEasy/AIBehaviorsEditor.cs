@@ -24,6 +24,7 @@ namespace AIBehaviorEditor
 
 		SerializedObject m_Object;
 		Transform transform;
+		GameObject statesGameObject;
 
 		private int curStateSelection = 0;
 		private int prevStateSelection = -1;
@@ -176,7 +177,7 @@ namespace AIBehaviorEditor
 
 							DestroyImmediate(m_Prop.objectReferenceValue);
 							string typeName = derivedStateNames[newIndex];
-							m_Prop.objectReferenceValue = ComponentHelper.AddComponentByName(typeName);
+							m_Prop.objectReferenceValue = ComponentHelper.AddComponentByName(fsm.statesGameObject, typeName);
 							newName = AIBehaviorsComponentInfoHelper.GetNameFromType(typeName);
 							UpdateStateName(newName, (m_Prop.objectReferenceValue as BaseState));
 						}
@@ -204,11 +205,11 @@ namespace AIBehaviorEditor
 							prop.InsertArrayElementAtIndex(i);
 							BaseState prevState = m_Object.FindProperty(string.Format(kStatesArrayData, i)).objectReferenceValue as BaseState;
 							string typeName = prevState.GetType().Name;
-							BaseState newState = ComponentHelper.AddComponentByName(typeName) as BaseState;
+							BaseState newState = ComponentHelper.AddComponentByName(statesGameObject, typeName) as BaseState;
 							newState.name = prevState.name;
 							UpdateStateName(prevState.name, newState);
 							m_Object.FindProperty(string.Format(kStatesArrayData, i+1)).objectReferenceValue = newState;
-							Undo.RegisterCreatedObjectUndo(fsm.gameObject, "Added New State");
+							Undo.RegisterCreatedObjectUndo(statesGameObject, "Added New State");
 						}
 
 						GUI.enabled = states.Length > 1;
@@ -292,61 +293,30 @@ namespace AIBehaviorEditor
 
 		void InitStates()
 		{
-			CleanupNullStates();
+			SerializedProperty m_Prop = m_Object.FindProperty("statesGameObject");
+
+			if ( m_Prop.objectReferenceValue == null )
+			{
+				statesGameObject = new GameObject("States");
+				m_Prop.objectReferenceValue = statesGameObject;
+
+				statesGameObject.transform.parent = transform;
+				statesGameObject.transform.localPosition = Vector3.zero;
+				statesGameObject.transform.localRotation = Quaternion.identity;
+				statesGameObject.transform.localScale = Vector3.one;
+
+				m_Object.ApplyModifiedProperties();
+			}
+			else
+			{
+				statesGameObject = m_Prop.objectReferenceValue as GameObject;
+			}
+
 			GetExistingStates();
 
 			if ( fsm.states.Length == 0 )
 			{
 				InitNewStates();
-			}
-		}
-
-
-		void CleanupNullStates()
-		{
-			BaseState[] states = fsm.GetAllStates();
-			List<BaseState> stateList = new List<BaseState>();
-
-			foreach ( BaseState state in states )
-			{
-				if ( state != null && string.IsNullOrEmpty(state.name) )
-				{
-					stateList.Add(state);
-				}
-			}
-
-			if (states.Length != stateList.Count)
-			{
-				SerializedObject sObject = new SerializedObject(target);
-				SerializedProperty mProp = sObject.FindProperty("states");
-
-				mProp.arraySize = stateList.Count;
-
-				for (int i = 0; i < stateList.Count; i++)
-				{
-					mProp.GetArrayElementAtIndex(i).objectReferenceValue = stateList[i];
-				}
-
-				sObject.ApplyModifiedProperties();
-			}
-		}
-
-
-		void GetExistingStates()
-		{
-			BaseState[] states = fsm.GetAllStates();
-
-			foreach ( BaseState state in states )
-			{
-				if ( state != null && string.IsNullOrEmpty(state.name) )
-				{
-					SerializedObject sObject = new SerializedObject(state);
-					SerializedProperty mProp = sObject.FindProperty("name");
-					string stateTypeName = state.GetType().ToString();
-
-					mProp.stringValue = AIBehaviorsComponentInfoHelper.GetNameFromType(stateTypeName);
-					sObject.ApplyModifiedProperties();
-				}
 			}
 		}
 
@@ -385,7 +355,7 @@ namespace AIBehaviorEditor
 
 				try
 				{
-					BaseState baseState = ComponentHelper.AddComponentByName(stateClassName) as BaseState;
+					BaseState baseState = ComponentHelper.AddComponentByName(statesGameObject, stateClassName) as BaseState;
 					baseState.name = stateName;
 
 					statesList.Add(baseState);
@@ -398,6 +368,25 @@ namespace AIBehaviorEditor
 			}
 
 			fsm.ReplaceAllStates(statesList.ToArray());
+		}
+
+
+		void GetExistingStates()
+		{
+			BaseState[] states = fsm.GetAllStates();
+
+			foreach ( BaseState state in states )
+			{
+				if ( state != null && string.IsNullOrEmpty(state.name) )
+				{
+					SerializedObject sObject = new SerializedObject(state);
+					SerializedProperty mProp = sObject.FindProperty("name");
+					string stateTypeName = state.GetType().ToString();
+
+					mProp.stringValue = AIBehaviorsComponentInfoHelper.GetNameFromType(stateTypeName);
+					sObject.ApplyModifiedProperties();
+				}
+			}
 		}
 
 

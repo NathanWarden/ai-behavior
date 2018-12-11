@@ -6,8 +6,7 @@ Version 3.0
 
 Changes:
 ------------
-- States, Triggers, and Animation States are now ScriptableObjects instead of Components.
-- Now uses mcs.rsp instead of smcs.rsp
+
 
 Fixes:
 ------------

@@ -75,14 +75,14 @@ namespace AIBehaviorEditor
 		[MenuItem(rootMenu + "Other/Enable Astar Pathfinding Project Integration", false, 11)]
 		public static void EnableAstar()
 		{
-			AddMcsDefine(astarDefine);
+			AddSmcsDefine(astarDefine);
 		}
 
 
 		[MenuItem(rootMenu + "Other/Disable Astar Pathfinding Project Integration", false, 11)]
 		public static void DisableAstar()
 		{
-			RemoveMcsDefine(astarDefine);
+			RemoveSmcsDefine(astarDefine);
 		}
 
 
@@ -91,14 +91,14 @@ namespace AIBehaviorEditor
 		[MenuItem(rootMenu + "Other/Enable Astar Pathfinding Project PRO Integration", false, 11)]
 		public static void EnableAstarPro()
 		{
-			AddMcsDefine(astarProDefine);
+			AddSmcsDefine(astarProDefine);
 		}
 
 
 		[MenuItem(rootMenu + "Other/Disable Astar Pathfinding Project PRO Integration", false, 11)]
 		public static void DisableAstarPro()
 		{
-			RemoveMcsDefine(astarProDefine);
+			RemoveSmcsDefine(astarProDefine);
 		}
 
 
@@ -107,14 +107,14 @@ namespace AIBehaviorEditor
 		[MenuItem(rootMenu + "Other/Enable UFPS Integration", false, 11)]
 		public static void EnableUFPS()
 		{
-			AddMcsDefine(ufpsDefine);
+			AddSmcsDefine(ufpsDefine);
 		}
 
 
 		[MenuItem(rootMenu + "Other/Disable UFPS Integration", false, 11)]
 		public static void DisableUFPS()
 		{
-			RemoveMcsDefine(ufpsDefine);
+			RemoveSmcsDefine(ufpsDefine);
 		}
 
 
@@ -123,42 +123,42 @@ namespace AIBehaviorEditor
 		[MenuItem(rootMenu + "Other/Enable PlayMaker Integration", false, 11)]
 		public static void EnablePlayMaker()
 		{
-			AddMcsDefine(playmakerDefine);
+			AddSmcsDefine(playmakerDefine);
 		}
 
 
 		[MenuItem(rootMenu + "Other/Disable PlayMaker Integration", false, 11)]
 		public static void DisablePlayMaker()
 		{
-			RemoveMcsDefine(playmakerDefine);
+			RemoveSmcsDefine(playmakerDefine);
 		}
 
 
-		static void AddMcsDefine(string defineName)
+		static void AddSmcsDefine(string defineName)
 		{
-			string mcsPath = GetMcsPath();
+			string smcsPath = GetSmcsPath();
 			string defineLine = "-define:" + defineName;
-			string mcsText = "";
+			string smcsText = "";
 
-			if ( !File.Exists(mcsPath) )
+			if ( !File.Exists(smcsPath) )
 			{
-				File.WriteAllText(mcsPath, "");
+				File.WriteAllText(smcsPath, "");
 			}
 			else
 			{
-				mcsText = File.ReadAllText(mcsPath);
+				smcsText = File.ReadAllText(smcsPath);
 			}
 
-			string[] lines = mcsText.Split('\n');
+			string[] lines = smcsText.Split('\n');
 
-			if ( McsHasDefine(lines, defineLine) )
+			if ( SmcsHasDefine(lines, defineLine) )
 			{
 				Debug.LogWarning(defineName + " already defined.");
 				return;
 			}
 
-			mcsText += "\n" + defineLine;
-			File.WriteAllText(mcsPath, mcsText);
+			smcsText += "\n" + defineLine;
+			File.WriteAllText(smcsPath, smcsText);
 
 			AssetDatabase.Refresh();
 
@@ -166,17 +166,17 @@ namespace AIBehaviorEditor
 		}
 
 
-		static void RemoveMcsDefine(string defineName)
+		static void RemoveSmcsDefine(string defineName)
 		{
-			string mcsPath = GetMcsPath();
+			string smcsPath = GetSmcsPath();
 
-			if ( File.Exists(mcsPath) )
+			if ( File.Exists(smcsPath) )
 			{
-				string mcsText = File.ReadAllText(mcsPath);
+				string smcsText = File.ReadAllText(smcsPath);
 				string defineLine = "-define:" + defineName;
-				string[] lines = mcsText.Split('\n');
+				string[] lines = smcsText.Split('\n');
 
-				if ( McsHasDefine(lines, defineLine, true) )
+				if ( SmcsHasDefine(lines, defineLine, true) )
 				{
 					string output = "";
 
@@ -195,7 +195,7 @@ namespace AIBehaviorEditor
 						}
 					}
 
-					File.WriteAllText(mcsPath, output);
+					File.WriteAllText(smcsPath, output);
 				}
 
 				AssetDatabase.Refresh();
@@ -203,7 +203,7 @@ namespace AIBehaviorEditor
 		}
 
 
-		static bool McsHasDefine(string[] lines, string defineLine, bool removeIfExists = false)
+		static bool SmcsHasDefine(string[] lines, string defineLine, bool removeIfExists = false)
 		{
 			for ( int i = 0; i < lines.Length; i++ )
 			{
@@ -228,9 +228,9 @@ namespace AIBehaviorEditor
 		}
 
 
-		static string GetMcsPath()
+		static string GetSmcsPath()
 		{
-			return Application.dataPath + "/mcs.rsp";
+			return Application.dataPath + "/smcs.rsp";
 		}
 
 

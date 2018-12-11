@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace AIBehavior
 {
-	public class AIComponent : ScriptableObject
+	public class AIComponent : MonoBehaviour
 	{
 		// === General Items === //
 

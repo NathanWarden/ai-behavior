@@ -14,18 +14,24 @@ namespace AIBehavior
 		float prevNormalizedTime = 0.0f;
 
 
-		protected override void Init (AIBehaviors fsm)
+		protected override void Awake()
 		{
+			base.Awake();
+
 			if ( animator == null )
 			{
-				animator = fsm.GetComponentInChildren<Animator>();
+				animator = transform.parent.GetComponentInChildren<Animator>();
 
 				if ( animator == null )
 				{
 					Debug.LogWarning("An Animator component must be attached when using the " + this.GetType());
 				}
 			}
+		}
 
+
+		protected override void Init (AIBehaviors fsm)
+		{
 			prevNormalizedTime = 0.0f;
 			base.Init(fsm);
 		}

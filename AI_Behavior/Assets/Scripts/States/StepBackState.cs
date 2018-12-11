@@ -56,14 +56,12 @@ namespace AIBehavior
 
 		protected override void Action(AIBehaviors fsm)
 		{
-			Transform aiTfm = fsm.aiTransform;
-
 			if ( player != null )
 			{
 				// Rotate towards the target
-				aiTfm.LookAt (new Vector3(player.position.x, aiTfm.position.y, player.position.z));
+				fsm.aiTransform.LookAt (new Vector3(player.position.x, transform.position.y, player.position.z));
 
-				direction = (aiTfm.position - player.position).normalized;
+				direction = (fsm.aiTransform.position - player.position).normalized;
 				direction.y = 0.0f;
 				targetPosition = player.position + (direction * distance);
 
@@ -76,17 +74,17 @@ namespace AIBehavior
 				} 
 				else 
 				{
-					aiTfm.Translate(direction * Time.deltaTime * movementSpeed, Space.World);
+					fsm.aiTransform.Translate(direction * Time.deltaTime * movementSpeed, Space.World);
 				}
 			}
 
 			// No movement check
-			if (Time.time > nextCheckHasMovement && !HasMovement (aiTfm.position)) 
+			if (Time.time > nextCheckHasMovement && !HasMovement (fsm.aiTransform.position)) 
 			{
 				fsm.ChangeActiveState (fsm.previousState);
 			}
 
-			previousPosition = aiTfm.position;
+			previousPosition = fsm.aiTransform.position;
 		}
 
 

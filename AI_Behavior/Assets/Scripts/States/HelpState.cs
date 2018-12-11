@@ -129,7 +129,7 @@ namespace AIBehavior
 			{
 				GUILayout.Label ("Debug:", EditorStyles.boldLabel);
 				GUILayout.BeginVertical(GUI.skin.box);
-				GUILayout.Label("Distance to target: " + (fsm.aiTransform.position - helpPoint).magnitude.ToString(), EditorStyles.boldLabel);
+				GUILayout.Label("Distance to target: " + (transform.position - helpPoint).magnitude.ToString(), EditorStyles.boldLabel);
 				GUILayout.EndVertical();
 			}
 		}

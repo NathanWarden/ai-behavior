@@ -34,6 +34,7 @@ namespace AIBehavior
 
 		// === Animation Variables === //
 
+		public AIAnimationStates animationStatesComponent;
 		public AIAnimationState[] animationStates = new AIAnimationState[1];
 		protected virtual bool playAnimation { get { return true; } }
 
@@ -250,7 +251,7 @@ namespace AIBehavior
 				Vector3 spawnPoint = new Vector3();
 				if (itemSpawnMode == ItemSpawnMode.AIPosition) 
 				{
-					spawnPoint = fsm.aiTransform.position;
+					spawnPoint = transform.position;
 				} 
 				else if (itemSpawnMode == ItemSpawnMode.SpawnPoint) 
 				{
@@ -278,7 +279,7 @@ namespace AIBehavior
 						float maxRandomness = Mathf.PI / (totalAmount+1);
 						float x = Mathf.Cos(radian*Random.value*maxRandomness);
 						float z = Mathf.Sin(radian*Random.value*maxRandomness);
-						instance.transform.position = fsm.aiTransform.position + new Vector3(x*spawnDistance, 2, z*spawnDistance);
+						instance.transform.position = transform.position + new Vector3(x*spawnDistance, 2, z*spawnDistance);
 					}
 
 					instance.SendMessage("OnItemSpawned", fsm, SendMessageOptions.DontRequireReceiver);
@@ -355,6 +356,10 @@ namespace AIBehavior
 
 		public void OnInspectorEnabled(SerializedObject m_ParentObject)
 		{
+			SerializedObject m_Object = new SerializedObject(this);
+
+			AIBehaviorsAnimationEditorGUI.OnInspectorEnabled(m_ParentObject, m_Object);
+
 			OnStateInspectorEnabled(m_ParentObject);
 		}
 
@@ -377,7 +382,7 @@ namespace AIBehavior
 			AIBehaviorsTriggersGUI.Draw(stateObject, fsm, "Triggers:", "AIBehaviors_TriggersFoldout");
 			EditorGUILayout.Separator();
 
-			this.DrawAnimationFields(stateObject, fsm.GetComponent<AIAnimationStates>());
+			this.DrawAnimationFields(stateObject);
 
 			DrawFoldouts(stateObject, fsm);
 
@@ -505,7 +510,7 @@ namespace AIBehavior
 			
 			if ( DrawFoldout("audioFoldout", "Audio:") )
 			{
-				DrawAudioProperties(m_Object, fsm);
+				DrawAudioProperties(m_Object);
 			}
 
 			EditorGUILayout.Separator();
@@ -546,9 +551,9 @@ namespace AIBehavior
 		}
 
 
-		protected virtual void DrawAnimationFields(SerializedObject stateObject, AIAnimationStates animStatesComponent)
+		protected virtual void DrawAnimationFields(SerializedObject mObject)
 		{
-			AIBehaviorsAnimationEditorGUI.DrawAnimationFields(stateObject, animStatesComponent, UsesMultipleAnimations());
+			AIBehaviorsAnimationEditorGUI.DrawAnimationFields(mObject, UsesMultipleAnimations());
 			EditorGUILayout.Separator();
 		}
 
@@ -605,7 +610,7 @@ namespace AIBehavior
 		}
 
 
-		public void DrawAudioProperties(SerializedObject m_State, AIBehaviors fsm)
+		public void DrawAudioProperties(SerializedObject m_State)
 		{
 			SerializedProperty m_Property;
 			m_Property = m_State.FindProperty("sounds");
@@ -634,7 +639,7 @@ namespace AIBehavior
 
 				if (GUILayout.Button ("Play")) 
 				{
-					PlaySound (i, fsm);
+					PlaySound (i);
 				}
 
 				GUILayout.EndVertical();
@@ -685,14 +690,14 @@ namespace AIBehavior
 				m_property.floatValue = 0.0f;
 		}
 
-		void PlaySound(int index, AIBehaviors fsm)
+		void PlaySound(int index)
 		{
 			if (sounds [index].audioClip != null) 
 			{
-				AudioSource audioSource = fsm.GetComponent<AudioSource> ();
+				AudioSource audioSource = GetComponent<AudioSource> ();
 
 				if (audioSource == null) {
-					audioSource = fsm.gameObject.AddComponent<AudioSource> ();
+					audioSource = gameObject.AddComponent<AudioSource> ();
 				}
 					
 				audioSource.volume = sounds [index].audioVolume;

@@ -337,7 +337,7 @@ namespace AIBehavior
 				GUILayout.BeginVertical(GUI.skin.box);
 				if ( seekTarget != null )
 				{
-					GUILayout.Label("Distance to target: " + (fsm.aiTransform.position - targetPosition).magnitude.ToString(), EditorStyles.boldLabel);
+					GUILayout.Label("Distance to target: " + (transform.position - targetPosition).magnitude.ToString(), EditorStyles.boldLabel);
 				}
 				else
 				{

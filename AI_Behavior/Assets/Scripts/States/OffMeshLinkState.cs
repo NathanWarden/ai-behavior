@@ -98,7 +98,7 @@ namespace AIBehavior
 			if (!isJumping && Time.time > jumpTime)
 			{
 				isJumping = true;
-				fsm.StartCoroutine(HandleJump(startPosition, endPosition, fsm));
+				StartCoroutine(HandleJump(startPosition, endPosition, fsm));
 			}
 		}
 
@@ -110,11 +110,11 @@ namespace AIBehavior
 			fallDistance = GetFallDistance(startLocation, endLocation);
 			fallDuration = GetHeightDuration(fallDistance);
 
-			fsm.aiTransform.position = startLocation;
+			transform.position = startLocation;
 
-			fsm.StartCoroutine(DoHorizontal(startLocation, endLocation, jumpDuration + fallDuration));
-			yield return fsm.StartCoroutine(DoJump(startLocation, endLocation, jumpDuration));
-			yield return fsm.StartCoroutine(DoFall(startLocation.y + jumpHeight, endLocation, fallDuration));
+			StartCoroutine(DoHorizontal(startLocation, endLocation, jumpDuration + fallDuration));
+			yield return StartCoroutine(DoJump(startLocation, endLocation, jumpDuration));
+			yield return StartCoroutine(DoFall(startLocation.y + jumpHeight, endLocation, fallDuration));
 
 			fsmTransform.position = endPosition;
 			if (returnToPreviousState) 

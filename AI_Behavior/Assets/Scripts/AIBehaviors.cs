@@ -15,7 +15,7 @@ namespace AIBehavior
 	/// This class is the brain of the AIBehavior system. It controls state changes and various callbacks.
 	/// </summary>
 	[RequireComponent(typeof(AIAnimationStates))]
-	public class AIBehaviors : MonoBehaviour
+	public class AIBehaviors : AIComponent
 	{
 		/// <summary>
 		/// Is this AI active (Read Only)?
@@ -120,6 +120,11 @@ namespace AIBehavior
 		/// The maximum health the AI has
 		/// </summary>
 		public float maxHealth = 100.0f;
+
+		/// <summary>
+		/// The object where the AI states and triggers are located
+		/// </summary>
+		public GameObject statesGameObject = null;
 
 		// === Animation Callback Info === //
 
@@ -229,12 +234,6 @@ namespace AIBehavior
 
 		void Start()
 		{
-			if (initialState == null && stateCount > 0)
-			{
-				initialState = states[0];
-			}
-
-			Debug.Log(initialState == null);
 			ChangeActiveState(initialState);
 		}
 

@@ -88,11 +88,11 @@ namespace AIBehaviorEditor
 
 			if ( GUILayout.Button(styles.blankContent, styles.addStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
 			{
-				ScriptableObject result = null;
+				Component result = null;
 
 				for ( int i = 0; i < triggerTypeNames.Length; i++ )
 				{
-					result = ComponentHelper.AddComponentByName(triggerTypeNames[i]);
+					result = ComponentHelper.AddComponentByName(fsm.statesGameObject, triggerTypeNames[i]);
 
 					if ( result != null )
 					{
@@ -130,12 +130,17 @@ namespace AIBehaviorEditor
 
 			if ( newSelection != initialSelection )
 			{
+				GameObject triggerObject = trigger.gameObject;
 				BaseTrigger[] triggers = trigger.subTriggers;
 				BaseTrigger newTrigger;
 
-				//Undo.RegisterFullObjectHierarchyUndo(triggerObject.transform.root.gameObject, "AddTrigger");
+				#if UNITY_4_3
+				Undo.RegisterFullObjectHierarchyUndo(triggerObject.transform.root.gameObject);
+				#else
+				Undo.RegisterFullObjectHierarchyUndo(triggerObject.transform.root.gameObject, "AddTrigger");
+				#endif
 
-				newTrigger = ScriptableObject.CreateInstance(triggerTypeNames[newSelection]) as BaseTrigger;
+				newTrigger = ComponentHelper.AddComponentByName(triggerObject, triggerTypeNames[newSelection]) as BaseTrigger;
 				Object.DestroyImmediate(trigger, true);
 				newTrigger.subTriggers = triggers;
 				triggersProperty.GetArrayElementAtIndex(index).objectReferenceValue = newTrigger;
@@ -174,8 +179,10 @@ namespace AIBehaviorEditor
 					GUI.enabled = true;
 					if ( GUILayout.Button(styles.blankContent, styles.addStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
 					{
+						GameObject go = (m_Object.targetObject as Component).gameObject;
+
 						triggersProperty.InsertArrayElementAtIndex(index);
-						triggersProperty.GetArrayElementAtIndex(index+1).objectReferenceValue = ComponentHelper.AddComponentByName(firstTriggerType);
+						triggersProperty.GetArrayElementAtIndex(index+1).objectReferenceValue = ComponentHelper.AddComponentByName(go, firstTriggerType);
 					}
 
 					if ( GUILayout.Button(styles.blankContent, styles.removeStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
@@ -269,12 +276,17 @@ namespace AIBehaviorEditor
 				GUILayout.Space(insetSpace);
 				if ( GUILayout.Button(styles.blankContent, styles.addStyle, GUILayout.MaxWidth(styles.addRemoveButtonWidths)) )
 				{
+					GameObject go = trigger.gameObject;
 					int arraySize = subTriggersProperty.arraySize;
 
+					#if UNITY_4_3
+					Undo.RegisterFullObjectHierarchyUndo(fsm.gameObject);
+					#else
 					Undo.RegisterFullObjectHierarchyUndo(fsm.gameObject, "AddSubTrigger");
+					#endif
 
 					subTriggersProperty.arraySize++;
-					subTriggersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = ScriptableObject.CreateInstance(triggerTypeNames[0]) as BaseTrigger;
+					subTriggersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = ComponentHelper.AddComponentByName(go, triggerTypeNames[0]);
 				}
 			}
 			GUILayout.EndHorizontal();

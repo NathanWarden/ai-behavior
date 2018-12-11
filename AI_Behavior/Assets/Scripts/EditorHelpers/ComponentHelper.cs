@@ -5,7 +5,7 @@ namespace AIBehavior
 {
 	public static class ComponentHelper
 	{
-		public static ScriptableObject AddComponentByName (string componentName, string namespaceName = "AIBehavior")
+		public static Component AddComponentByName (GameObject targetObject, string componentName, string namespaceName = "AIBehavior")
 		{
 			bool emptyNameSpace = string.IsNullOrEmpty (namespaceName);
 			string typeName;
@@ -24,11 +24,11 @@ namespace AIBehavior
 
 			if ( result == null )
 			{
-				return emptyNameSpace ? null : AddComponentByName (componentName, "");
+				return emptyNameSpace ? null : AddComponentByName (targetObject, componentName, "");
 			}
 			else
 			{
-				return ScriptableObject.CreateInstance(Type.GetType(typeName));
+				return targetObject.AddComponent(Type.GetType(typeName));
 			}
 		}
 	}

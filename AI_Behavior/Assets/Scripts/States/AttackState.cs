@@ -56,10 +56,15 @@ namespace AIBehavior
 		bool goingToReload = false;
 
 
+		protected override void Awake()
+		{
+			skinnedMeshRenderer = transform.root.GetComponentInChildren<SkinnedMeshRenderer>();
+			base.Awake();
+		}
+
+
 		protected override void Init(AIBehaviors fsm)
 		{
-			skinnedMeshRenderer = fsm.transform.root.GetComponentInChildren<SkinnedMeshRenderer>();
-
 			goingToReload = false;
 			curAnimPosition = 0.0f;
 			previousSamplePosition = 0.0f;
@@ -251,7 +256,7 @@ namespace AIBehavior
 			{
 				attackCount = 0;
 				goingToReload = true;
-				fsm.StartCoroutine (ChangeStateWhenAnimationFinished (fsm));
+				StartCoroutine (ChangeStateWhenAnimationFinished (fsm));
 			}
 		}
 
@@ -298,7 +303,7 @@ namespace AIBehavior
 		{
 			SerializedProperty m_property;
 
-			string[] animNames = AIBehaviorsAnimationEditorGUI.GetAnimationStateNames(m_State, fsm.GetComponent<AIAnimationStates>());
+			string[] animNames = AIBehaviorsAnimationEditorGUI.GetAnimationStateNames(m_State);
 			int curAttackAnimIndex = 0;
 
 			for ( int i = 0; i < animNames.Length; i++ )

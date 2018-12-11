@@ -35,7 +35,7 @@ namespace AIBehaviorExamples
 			}
 			else
 			{
-				Debug.LogWarning("attackData.target is null, you may want to have a NoPlayerInSight trigger on the AI '" + attackData.fsm.name + "'");
+				Debug.LogWarning("attackData.target is null, you may want to have a NoPlayerInSight trigger on the AI '" + attackData.attackState.transform.parent.name + "'");
 			}
 		}
 

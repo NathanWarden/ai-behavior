@@ -54,6 +54,19 @@ namespace AIBehavior
 		}
 
 
+		protected override void Awake()
+		{
+			base.Awake();
+
+			previousPosition = transform.position;
+
+			if ( isEnabled )
+			{
+				SortPatrolPoints();
+			}
+		}
+
+
 		// === Public Methods === //
 
 		public virtual void SetPatrolPoints(Transform patrolPointsGroup)
@@ -135,13 +148,6 @@ namespace AIBehavior
 
 		protected override void Init(AIBehaviors fsm)
 		{
-			previousPosition = fsm.aiTransform.position;
-
-			if ( isEnabled )
-			{
-				SortPatrolPoints();
-			}
-
 			if ( patrolPointsGroup == null && (patrolPoints == null || patrolPoints.Length == 0) )
 			{
 				Debug.LogWarning("The variable 'patrolPointsGroup' is unassigned for the 'Patrol' state on " + fsm.name);
@@ -177,7 +183,7 @@ namespace AIBehavior
 					{
 						float thisSqrMagnitude = (thisPos - patrolPoints[i].position).sqrMagnitude;
 
-						if ( CheckIfWithinThreshold(fsm.aiTransform, thisPos, patrolPoints[i].position, nearestSqrMagnitude) )
+						if ( CheckIfWithinThreshold(thisPos, patrolPoints[i].position, nearestSqrMagnitude) )
 						{
 							nearestSqrMagnitude = thisSqrMagnitude;
 							nearestNode = i;
@@ -239,7 +245,7 @@ namespace AIBehavior
 			Vector3 targetPoint = patrolPoints[currentPatrolPoint].position;
 			Vector3 thisPos = fsm.aiTransform.position;
 			
-			if ( CheckIfWithinThreshold(fsm.aiTransform, thisPos, targetPoint, GetSquarePointDistanceThreshold(pointDistanceThreshold) ) )
+			if ( CheckIfWithinThreshold(thisPos, targetPoint, GetSquarePointDistanceThreshold(pointDistanceThreshold) ) )
 			{
 				GetNextPatrolPoint();
 			}
@@ -254,7 +260,7 @@ namespace AIBehavior
 		}
 
 
-		protected virtual bool CheckIfWithinThreshold (Transform aiTfm, Vector3 currentPosition, Vector3 destination, float sqrDistanceThreshold)
+		protected virtual bool CheckIfWithinThreshold (Vector3 currentPosition, Vector3 destination, float sqrDistanceThreshold)
 		{
 			float distance = (currentPosition - destination).sqrMagnitude;
 			bool isWithinDistance = distance < sqrDistanceThreshold;
@@ -262,7 +268,7 @@ namespace AIBehavior
 
 			if ( useAccurateCornering )
 			{
-				Vector3 velocity = aiTfm.forward * Time.deltaTime * movementSpeed * corneringError;
+				Vector3 velocity = transform.forward * Time.deltaTime * movementSpeed * corneringError;
 				float nextDistance = (currentPosition + velocity - destination).sqrMagnitude;
 				bool isPastPoint = distance < nextDistance;
 
