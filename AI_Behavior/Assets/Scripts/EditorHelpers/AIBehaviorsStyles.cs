@@ -41,7 +41,7 @@ namespace AIBehaviorEditor
 
 		Texture2D LoadButtonImage(string imageName)
 		{
-			string path = "Assets/AIBehavior/Editor/AIBehaviorsMadeEasy/Images/" + imageName + ".png";
+			string path = "Assets/Editor/AIBehaviorsMadeEasy/Images/" + imageName + ".png";
 			return UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D)) as Texture2D;
 		}
 	}
