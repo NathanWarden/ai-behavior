@@ -62,6 +62,12 @@ namespace AIBehavior
 		#if UNITY_EDITOR
 		public override void DrawInspectorProperties(AIBehaviors fsm, SerializedObject sObject)
 		{
+			if (fsm.userVariables.Length == 0)
+			{
+				GUILayout.Box("No variables defined!");
+				return;
+			}
+
 			EditorGUILayout.Separator();
 
 			GUILayout.Label("Properties: ", EditorStyles.boldLabel);
