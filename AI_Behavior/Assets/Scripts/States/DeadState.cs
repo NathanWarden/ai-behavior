@@ -16,6 +16,8 @@ namespace AIBehavior
 		public bool destroyColliders;
 		public bool destroyComponents;
 		public Component[] componentsToDestroy;
+		public bool destroyGameObjects;
+		public GameObject[] gameObjectsToDestroy;
 		public bool changeTag;
 		public string deadTag;
 
@@ -34,9 +36,14 @@ namespace AIBehavior
 				transform.parent.tag = deadTag;
 			}
 
-			if (componentsToDestroy.Length > 0) 
+			if (destroyComponents)
 			{
-				DestroyComponents ();
+				DestroyObjects (componentsToDestroy);
+			}
+
+			if (destroyGameObjects)
+			{
+				DestroyObjects (gameObjectsToDestroy);
 			}
 
 			if (destroyColliders) 
@@ -61,8 +68,7 @@ namespace AIBehavior
 				Destroy (fsm.gameObject);
 			}
 		}
-		
-		
+
 		public override string DefaultDisplayName()
 		{
 			return "Dead";
@@ -78,11 +84,11 @@ namespace AIBehavior
 			}
 		}
 
-		void DestroyComponents ()
+		void DestroyObjects (UnityEngine.Object[] objects)
 		{
-			for (int i = 0; i < componentsToDestroy.Length; i++) 
+			for (int i = 0; i < objects.Length; i++)
 			{
-				Destroy(componentsToDestroy [i]);
+				Destroy(objects [i]);
 			}
 		}
 
@@ -102,9 +108,8 @@ namespace AIBehavior
 			
 			GUILayout.BeginVertical(GUI.skin.box);
 
-			//InspectorHelper.DrawInspector(m_Object);
 			property = m_Object.FindProperty("destroyGameObject");
-			EditorGUILayout.PropertyField (property);
+			EditorGUILayout.PropertyField (property, new GUIContent("Destroy This Object"));
 			if (property.boolValue) 
 			{
 				property = m_Object.FindProperty("destroyAfterTime");
@@ -114,13 +119,18 @@ namespace AIBehavior
 			property = m_Object.FindProperty("destroyColliders");
 			EditorGUILayout.PropertyField (property);
 
+			property = m_Object.FindProperty("destroyGameObjects");
+			EditorGUILayout.PropertyField (property);
+			if (property.boolValue)
+			{
+				InspectorHelper.DrawArray (m_Object, "gameObjectsToDestroy");
+			}
+
 			property = m_Object.FindProperty("destroyComponents");
 			EditorGUILayout.PropertyField (property);
-			if (property.boolValue) 
+			if (property.boolValue)
 			{
-				//property = m_Object.FindProperty("componentsToDestroy");
 				InspectorHelper.DrawArray (m_Object, "componentsToDestroy");
-				//EditorGUILayout.PropertyField (property);
 			}
 
 			property = m_Object.FindProperty("changeTag");
