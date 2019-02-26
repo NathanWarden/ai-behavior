@@ -1,5 +1,6 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 #if UNITY_EDITOR
@@ -143,37 +144,23 @@ namespace AIBehavior
 		/// </summary>
 		public AIAnimationStates animationStates;
 
-		// === Delegates === //
-
-		/// <summary>
-		/// This delegate is used for the 'onStateChanged' callback
-		/// </summary>
-		public delegate void StateChangedDelegate(BaseState newState, BaseState previousState);
+		// === Callbacks === //
 
 		/// <summary>
 		/// Any time a state changes, this delegate is called.
 		/// </summary>
-		public StateChangedDelegate onStateChanged = null;
-
-		/// <summary>
-		/// This delegate is used for the 'onPlayAnimation' callback
-		/// </summary>
-		public delegate void AnimationCallbackDelegate(AIAnimationState animationState);
+		public Action<BaseState, BaseState> onStateChanged = null;
 
 		/// <summary>
 		/// This delegate is called anytime an animation should play.
 		/// </summary>
-		public AnimationCallbackDelegate onPlayAnimation = null;
-
-		/// <summary>
-		/// This delegate is used for the 'externalMove' callback
-		/// </summary>
-		public delegate void ExternalMoveDelegate(Vector3 targetPoint, float targetSpeed, float rotationSpeed);
+		public Action<AIAnimationState> onPlayAnimation = null;
 
 		/// <summary>
 		/// This delegate is called whenever a custom or 3rd party navigation system needs new location data.
+		/// Its parameters are Vector3 destination, moveSpeed, rotationSpeed.
 		/// </summary>
-		public ExternalMoveDelegate externalMove = null;
+		public Action<Vector3, float, float> externalMove = null;
 
 		// === Targetting and Rotation === //
 
@@ -508,19 +495,12 @@ namespace AIBehavior
 			InitGlobalTriggers();
 
 			previousState = currentState;
-
-			if ( previousState != null )
-			{
-				previousState.EndState(this);
-			}
+			previousState?.EndState(this);
 
 			currentState = newState;
 			newState.InitState(this);
 
-			if ( onStateChanged != null )
-			{
-				onStateChanged(newState, previousState);
-			}
+			onStateChanged?.Invoke(newState, previousState);
 		}
 
 
@@ -612,10 +592,7 @@ namespace AIBehavior
 				aiTransform.Rotate(Vector3.Cross(aiTransform.forward, velocity) * Time.deltaTime * rotationSpeed * rotationMultiplier);
 			}
 
-			if ( externalMove != null )
-			{
-				externalMove(targetPoint, targetSpeed, rotationSpeed);
-			}
+			externalMove?.Invoke(targetPoint, targetSpeed, rotationSpeed);
 		}
 
 
@@ -694,7 +671,7 @@ namespace AIBehavior
 		{
 			if ( onPlayAnimation != null )
 			{
-				onPlayAnimation(animState);
+				onPlayAnimation?.Invoke(animState);
 			}
 			else if ( animationCallbackComponent != null && animState != null )
 			{
