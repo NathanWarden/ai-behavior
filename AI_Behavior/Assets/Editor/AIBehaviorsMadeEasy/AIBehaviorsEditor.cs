@@ -434,7 +434,7 @@ namespace AIBehaviorEditor
 			GUILayout.EndVertical();
 			
 			EditorGUILayout.Separator();
-/*
+
 			GUILayout.BeginVertical(GUI.skin.box);
 			{
 				const string raycastLayersText = "Visual Obstruction Layers";
@@ -483,7 +483,7 @@ namespace AIBehaviorEditor
 				EditorGUILayout.Separator();
 			}
 			GUILayout.EndVertical();
-*/
+
 			EditorGUILayout.Separator();
 
 			// Health
