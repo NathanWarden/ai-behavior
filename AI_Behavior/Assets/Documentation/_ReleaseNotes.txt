@@ -1,26 +1,27 @@
 Release Notes for AI Behaviors Made Easy
 
+
 =====================================================
-Version 3.0
+Version 1.21
 =====================================================
 
-Changes:
+Features:
 ------------
-
-
-Fixes:
-------------
-- Fixed many bugs related to using an alternative AI Transform.
-
-=====================================================
-Version 2.0
-=====================================================
+- Added the ability to destroy objects on dead
 
 Changes:
 ------------
 - Moved code into assembly definition files
+- Changed several delegates to Actions (should not break compatibility)
 - Changed directory structure
-- Updated to Unity 2017.4
+- Updated to Unity 2018.3
+- Uncommented some features that were commented out
+
+Fixes:
+------------
+- Fixed many bugs related to using an alternative AI Transform.
+- Fixed an out of bounds error when no user variables are defined.
+
 
 
 =====================================================
