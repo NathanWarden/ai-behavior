@@ -46,9 +46,9 @@ namespace AIBehavior
 				DestroyObjects (gameObjectsToDestroy);
 			}
 
-			if (destroyColliders) 
+			if (destroyColliders)
 			{
-				DestroyColliders ();
+				DestroyObjects (gameObject.transform.parent.GetComponentsInChildren<Collider>());
 			}
 		}
 
@@ -72,16 +72,6 @@ namespace AIBehavior
 		public override string DefaultDisplayName()
 		{
 			return "Dead";
-		}
-
-		void DestroyColliders ()
-		{
-			Collider[] colliders = gameObject.transform.parent.GetComponentsInChildren<Collider>();
-
-			foreach ( Collider collider in colliders )
-			{
-				Destroy(collider);
-			}
 		}
 
 		void DestroyObjects (UnityEngine.Object[] objects)
