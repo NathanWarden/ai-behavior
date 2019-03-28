@@ -1,0 +1,1084 @@
+Release Notes for AI Behaviors Made Easy
+
+
+=====================================================
+Version 1.21
+=====================================================
+
+Features:
+------------
+- Added the ability to destroy objects on dead
+
+Changes:
+------------
+- Moved code into assembly definition files
+- Changed several delegates to Actions (should not break compatibility)
+- Changed directory structure
+- Updated to Unity 2018.3
+- Uncommented some features that were commented out
+
+Fixes:
+------------
+- Fixed many bugs related to using an alternative AI Transform.
+- Fixed an out of bounds error when no user variables are defined.
+
+
+
+=====================================================
+Version 1.20
+=====================================================
+
+Fixes:
+------------
+- Fixed the demo scene enemy animations.
+
+
+=====================================================
+Version 1.19
+=====================================================
+
+Changes:
+------------
+- Converted old UnityScript code to C#
+
+
+=====================================================
+Version 1.18.1
+=====================================================
+
+Changes:
+------------
+- Changed AIBehaviors.GotHit to AIBehaviors.Damage and made GotHit obsolete
+
+
+Fixes:
+------------
+- Fixed some compile errors when making a build
+- Fixed some meta files that somehow got corrupted
+- Fixed an issue where the console was spammed with error messages due to an unassigned aiTransform
+- Fixed a bug where using an attack interval wasn't working properly
+
+
+=====================================================
+Version 1.18
+=====================================================
+
+Features:
+------------
+- An AI can now pick a random point around its target in order to encircle it in the Seek state
+- Added a scene that shows how to use reusable AI
+
+
+Fixes:
+------------
+- Fixed some bugs that would cause Legacy Animation driven AIs to not be reusable
+
+
+=====================================================
+Version 1.17.1
+=====================================================
+
+Fixes:
+------------
+
+- Fixed some compile time errors
+
+
+=====================================================
+Version 1.17
+=====================================================
+
+
+Features:
+------------
+ - Added user variables to the General AI Properties in the AIBehaviors script
+ - Added a "CheckVariableTrigger" that checks the specified variable values to change to another state
+ - Added the posibility to change variable properties when entering a state
+ - Added an "RunTimeNavMesh" example scene showing how to generate a NavMesh at runtime working with AIs
+
+
+Changes:
+------------
+ - Updated documentation
+
+
+=====================================================
+Version 1.16
+=====================================================
+
+
+Features:
+------------
+Added multiplayer examples:
+ - "MultiPlayerLineOfSightTrigger" and an example scene "MultiPlayerLineOfSight" that shows how to adapts LineOfSightTrigger to work with more than one player
+ - "CustomNoPlayerInSightTrigger" and an example scene "FollowingLastAttackedPlayer" that shows how to make an AI follow the last attacked player modifying the "NoPlayerInSightTrigger"
+
+
+Changes:
+------------
+Added a "lastKnownTarget" variable and a "GetLastKnownTarget()" function to the AttackState
+Added the ability to also use short name hashes with the MecanimAttackState
+
+
+=====================================================
+Version 1.15
+=====================================================
+
+Fixes:
+------------
+
+Upgraded project to be compatible with Unity 5.6
+
+
+=====================================================
+Version 1.14
+=====================================================
+
+
+Features:
+------------
+SendMessage will now be called to a spawned item with the signature void OnItemSpawned(AIBehaviors fsm)
+Added an AI flying example, the "12_state_fly scene", it uses a regular patrol state but with a "FlightNavigator" script
+Added a new group moving example scene "FormationMovingAndAttacking" where AIs can be sent in group to attack buildings
+
+
+Changes:
+------------
+The object finder now automatically removes transforms if they have a different tag than one specified
+Improved group moving example showing a selector around selected units and showing the point where they are sent when doing right click
+
+
+Fixes:
+------------
+Fixed the AttackState and MecanimAttackState to check if the state hasn't changed before going to the reload state
+Fixed audio looping in states
+
+
+=====================================================
+Version 1.13
+=====================================================
+
+
+Features:
+------------
+Added a WanderState that makes the AI walk arround randomly and a demo scene for it "18_state_wander"
+Added a StepBackState that makes the AI keep a distance from the player/target and a demo scene fo it "19_state_stepback"
+Added a "Duration" and a "ChangeToState" options to the GetHelpState
+Added a debug label to the HelpState to know how far it is from the target point
+Added a group/formation moving example script with an example scene
+Added an AITransform parameter to the AIBehaviors script
+
+
+Changes:
+------------
+Updated project to Unity 5.5
+Each state can have more than one Audio, in those cases it will pick one randomly
+Removed the "Advanced Mode" option in the AIBehaviors script, now it always shows all the advanced options
+
+
+Fixes:
+------------
+Fixed the "HasMovement" checking in the SeekState, now it only checks it each second
+Fixed the "MultiplePlayerAttackPoints" demo scene that was sometimes shooting more than one projectile
+Fixed AttackState to wait until the animation is finished before to go to the ReloadState in last attack before reload
+
+
+=====================================================
+Version 1.12
+=====================================================
+
+
+Features:
+------------
+Added new documentation manual "AI Behavior Manual.pdf"
+Added a "Set transform as seek target" option to the SpeedExceededTrigger
+Added a "Plus Or Minus Damage" value to the AttackState, do add some randomness to the damage
+Added a "hitStateDuration" value and "changeToState" option to the GotHitState, to specify how long the hit state lasts and what to do after it
+Added a "HelpCondition" to the HelpState, to choose in witch cases the AI will help another AI asking for help
+Added a "Return To Previous State" option to the OffMeshLinkState
+Added a GetInvisibleState
+Added an "totalAmount" value and "exactPosition" option to the ItemSpawning on BaseState
+
+
+Changes:
+------------
+Removed the "Seek items with tag" option on the SeekState, it uses now the tags as all other states
+Removed "Speed objects tag" and "Seek objects tag" from the SpeedExceededTrigger, it uses now the tags as all other triggers
+Removed "Seek object duration" value from the SpeedExceededTrigger
+Removed "Start flee distance" from FleeState, this should be set as a WithinDistanceTrigger in a previous state (like Idle)
+Renamed "Direction seek distance" to "Stop flee distance" in the FleeState
+Modified the "05_state_seek" scene, now the enemy seeks and collects all the boxes of the scene
+Improved "08_state_ranged_attack" scene, the enemy now rotates toward the target
+Improved the "08a_state_ranged_attack_and_move" scene, the AI now rotates toward the player, seeks him if he goes too far and flees if it gets too close
+Improved the "10_state_got_hit" scene, now it shows the got_hit state, defending state and dead state... and how the defending bonus can work
+Simplified the CooldownableState class, it now only has "Cooldown time" and "Start cooldown on state end" options
+
+
+Fixes:
+------------
+Fixed the "03_state_follow" scene, just using a BeyondDistanceTrigger and a SeekState
+Fixed FleeState condition checking, where it wasn't stopping correctly at the specified distance
+Fixed the "Destroy components" option in DeadState, should be able to drag and drop the components
+
+
+=====================================================
+Version 1.11
+=====================================================
+
+
+Features:
+------------
+
+Added PlayMaker actions
+Added a Path Status trigger. Now you can detect if a NavMeshAgent based AI can make it to its destination.
+Added an option to the seek state to navigate as close to the target as possible.
+Added a "No Movement" transition to the seek state.
+Added an attack mode based on a time interval instead of based on an animation.
+Added a debug message as to why the agent can't rotate toward a target.
+Added the ability to turn off debug messages.
+Added a pathing script for Mecanim using the Astar Pathfinding project.
+Added a "returnToPreviousState" option to the GotHit state, which ignores the GotHit animation.
+Added the possiblity to spawn items when entering a state.
+Added some new options to the DeadState
+- You can change the tag of the AI
+- You can destroy the colliders
+- You can destroy components
+Added a label that displays the "Attack point" time.
+
+
+Changes:
+------------
+
+The AttackState now has a default option to only find visible targets or not
+The AttackState will now automatically switch to "Always Animate" and back to the default value
+Refactored the main AIBehaviors component to be slightly faster when getting sight position or direction under certain circumstances.
+Refactored the main AIBehaviors component to be safer when getting a state by index.
+Moved menu items under the Tools menu.
+Hit_By_UFPS is now blocked by a compiler define instead of using a zip file.
+UFPS, Astar, and PlayMaker integration now all uses defines controlled via a smcs.rsp file.
+The FleeState now uses the enumeration "AwayFromNearestTaggedObject" instead of "AwayFromNearestPlayer". The functionality is the same, but the name is clearer.
+
+
+Fixes:
+------------
+
+Fixed a bug where the AI attack method wouldn't register if the attack point slider was set near 1
+Items with the HideInInspector attribute will also be hidden in the AI Behaviors inspector.
+Fixed a possible array out of bounds exception in the Seek state.
+The Astar-AIBehavior character controller scripts now destroy the seek target when the AI is destroyed.
+The seek target now gets reset when the Seek state ends.
+Fixed a bug with the Attack state not rotating toward the attack target properly.
+Fixed a bug in the Audio trigger that was caused by Unity handling audio playback differently than before.
+Cleaned up the Seek State scene example a bit so the AI acts the way a user would more likely expect it to.
+
+
+=====================================================
+Version 1.10
+=====================================================
+
+
+Features:
+------------
+
+Added a new Reset mode selection to the TimerTrigger
+- If 'WhenTriggered' is selected it will only reset after the timer has expired while in it's parent state
+- If it expires within another state it will be true next time the parent state is entered
+Added an option to keep the agent upright (when rotating it)
+Added an ItemCount trigger that detects whether a certain amount of items are still in the scene
+Added a "No Target Found" transition to the seek state
+
+
+Fixes:
+------------
+
+Fixed a null reference exception when a state is removed apart from the AI Behaviors Editor
+
+
+Changes:
+------------
+
+Removed the FollowState since its' behavior can be replicated using other states and triggers
+PatrolState distance threshold is now as automated as possible
+Made GetNextPatrolPoint and other properties protected instead of private
+Removed IsAndIsNot from the CurrentState trigger. Use "Invert Result" instead
+Made the SetPatrolPoints methods virtual
+damageMultiplier is now protected instead of public. Use GetDamageMultiplier() instead.
+Added a virtual method "GetSquareDistanceThreshold" to the SeekState
+Added a DefaultDisplayName method to give each trigger and state a default name
+Updated the AttackData struct to have more data in it
+AIBehaviors.RotateAgent() is now a protected virtual method
+
+
+=====================================================
+Version 1.9
+=====================================================
+
+AI Behavior is now compatible with Unity 5! There are a few graphical issues still, but we will handle those as soon as possible.
+
+
+Features:
+------------
+
+Added a new Audio trigger
+Added the ability to use off mesh links
+Added two additional modes to the Flee State: Direction and AwayFromNearestPlayer
+Added a new trigger InSameLayer
+Added a new trigger IsObstructedFromPlayer
+Added a new Group trigger that is simply used to nest other triggers within it
+Updated the LineOfSight trigger to have a sight transform override
+The Flee State now defaults to the AwayFromNearestPlayer mode
+Added boxes around each state's properties in the inspector to make editing easier
+Added a zip file with a hit detection script for UFPS
+Added a SetPatrolPoints example script
+Added an overrideable point distance method to the patrol state in case a non 1:1 distance ratio is needed
+Added a timer to the NoPlayerInSightTrigger
+- It will not trigger until no player has been visible for the specified number of seconds
+- If a player is spotted, it will reset the timer
+
+
+Fixes:
+------------
+
+Updated the example scripts to handle melee on the default prefab character and to work with UFPS
+BaseState selection now works properly when using the default State Inspector for custom states
+Gizmos now draw properly for sub triggers
+
+
+Changes:
+------------
+
+The default rotation speed is now 360 instead of 90
+Rotation when using a NavMeshAgent is no longer based on angularVelocity, but is now handled internally
+The variable 'eyePosition' is now private, use the 'GetSightPosition' method instead
+The InPlayerView trigger's GetMainCamera is now overrideable
+The InPlayerView trigger's mainCamera field is now protected instead of private
+The targetItem Transform in the SeekState is now protected instead of private so it can be accessed in sub classes
+Broke out which objects can be potential helpers for the HelpState into a virtual method "GetPotentialHelpers"
+The Capsule collider on the avatar_complete prefab is no longer a trigger
+The editor methods in BaseState are now virtual instead of abstract
+
+
+=====================================================
+Version 1.8
+=====================================================
+
+Features:
+------------
+
+Added a new script (CachePlayerTagsOnAwake) that can be added to a spawnable player (or the like) so the newly spawned player will be recognized by other AIs.
+Added boxes around groups of items in the inspector to make editing easier
+
+
+Fixes:
+------------
+
+Fixed a possible null reference exception when assigning patrol points through the API.
+
+
+Changes:
+------------
+
+The AI and the targets it's looking for are now automatically ignored when raycasting.
+- This affects triggers like LineOfSight and NoPlayerInSight and anything that calls the GetClosestPlayerInSight method
+Updated the JS examples to be updated and have a cleaner method for using them.
+
+
+=====================================================
+Version 1.7.8
+=====================================================
+
+Features:
+------------
+
+Added an ExcludeFromStatesList attribute that can be added to a state in case you want it to not show up in the states dropdown. This is useful in cases such as Mock states for Unit Testing.
+
+
+Changes:
+------------
+
+Added overridable methods to AIBehaviors, BaseState and BaseTrigger called CreateObjectFinder so a custom object finder can be used
+TaggedObjectFinder now has an overridable method 'GetGameObjectsWithTag' to pass an array of GameObjects by tag. This can be used if you need to use a custom tagging system apart from Unity's.
+BaseState and BaseTrigger now define a field "ownsObjectFinder" if it is a root of using Custom Tags
+Made TaggedObjectFinder.CacheTransforms a virtual method
+
+Fixes:
+------------
+
+Added a check in MoveAgent to see if the navMeshAgent is enabled before setting the destination since it logs an error
+Fixed an error in the PatrolState.SetPatrolPoints method where it was looking at the current patrol point array size instead of the new one
+
+
+=====================================================
+Version 1.7.7
+=====================================================
+
+Changes:
+------------
+
+Low and High Health Triggers now derive from the base class HealthTrigger.
+Removed several variables that weren't being used.
+Updated the Triggers GUI to have compile flags to tell the difference between Unity 4.3 and future versions of the Undo.RegisterFullObjectHierarchyUndo method.
+
+
+=====================================================
+Version 1.7.6
+=====================================================
+
+Features:
+------------
+
+Added the ability for an AI in the IdleState to rotate toward its' target.
+
+
+=====================================================
+Version 1.7.5
+=====================================================
+
+Features:
+------------
+
+Added a maxHealth variable to the main AIBehaviors script.
+Added an AddSubTrigger method to the BaseTrigger class.
+Added a parentTrigger variable to the BaseTrigger class.
+Abstracted distance checking in the Patrol state into a virtual method "CheckIfWithinThreshold" so that it can be overriden for things such as when 2D characters are at different Z values but using the same patrol path.
+
+Changes:
+------------
+
+Made the editor Gui more friendly to setting up an AI on the fly through code.
+Removed some debug statements from AIBehaviorsAnimationEditorGUI.
+
+
+Fixes:
+------------
+
+AI will no longer allow a transition from a trigger if the transition state is null.
+
+
+=====================================================
+Version 1.7.4
+=====================================================
+
+Changes:
+------------
+
+Made each AI component derive from SavableComponent which gives each AI a unique id when GetSaveID() is called.
+
+
+Fixes:
+------------
+
+Fixed a bug where 'Auto' for animation states wasn't working properly.
+
+
+=====================================================
+Version 1.7.3
+=====================================================
+
+Changes:
+------------
+
+Moved “CurrentStateTrigger” into the AIBehavior namespace
+
+
+Fixes:
+------------
+
+Fixed a possible null reference exception in the AttackState
+
+
+=====================================================
+Version 1.7.2
+=====================================================
+
+Changes:
+------------
+
+Added a check if the Animation component is set to AlwaysAnimate in the AttackState so it will continue to use the animation’s time instead of approximating it.
+
+
+=====================================================
+Version 1.7.1
+=====================================================
+
+Changes:
+------------
+
+Wrapped the Editor classes in compiler flags in case they are moved into the Plugins folder.
+
+
+Fixes:
+------------
+
+Fixed an issue in the AttackState where an AI wouldn’t attack if it had a skinned mesh renderer that wasn’t visible in a camera. When not visible it now calculates it’s own normalized time based on the animation that would have been playing.
+Fixed an issue where an AI was unable to be damaged when calling AIBehaviors.GotHit instead of just blocking from going into the GotHit state.
+
+
+=====================================================
+Version 1.7
+=====================================================
+
+Features:
+------------
+
+Added a new trigger for detecting if the AI is in a state or not.
+
+
+Fixes:
+------------
+
+The follow state's last sighted position is now set initially to the AI's position in case a player can't be sighted. It was defaulting to the world origin.
+Fixed a bug where Undo would cause errors after a trigger was changed.
+
+
+=====================================================
+Version 1.6.9
+=====================================================
+
+Features:
+------------
+
+Added a simple Spaceship example to the project.
+Dead State now has a destroy timer on it, if it's set above 0 it will be destroyed after X secs of coming into the dead state.
+Added tooltips for the high and low health triggers for better understanding on the user's end.
+
+
+=====================================================
+Version 1.6.8
+=====================================================
+
+Fixes:
+------------
+
+Fixed a freeze bug in the InPlayerViewTrigger
+
+
+=====================================================
+Version 1.6.7
+=====================================================
+
+Fixes:
+------------
+
+State cooldowns no longer initialize values when the cool down is persistent when leaving the state. This was most evident when animations wouldn’t change, but affected other things as well.
+
+
+Changes:
+------------
+
+Created an abstract CooldownableState that all cooldownable states derive from, thus, Cooldown options are no longer included in states that don’t use cooldowns.
+
+
+=====================================================
+Version 1.6.6
+=====================================================
+
+Features:
+------------
+
+Added an additional SetPatrolPoints method to the Patrol State that allows you to pass in an array of points instead of just a parent.
+
+
+Changes:
+------------
+
+Added the Follow State back in, but it's no longer included in the initial setup.
+The Patrol State resets the patrol when adding new points due to the possiblity of a null reference exception.
+
+
+=====================================================
+Version 1.6.5
+=====================================================
+
+Features:
+------------
+
+Added a default Auto option to the Animation type drop down so the user doesn’t have to choose between Legacy and Mecanim.
+Added a Random option to the Patrol state for both Patrol Mode and Continue Previous Patrol Mode.
+
+
+Changes:
+------------
+
+Removed the Follow state since all of its' behavior can be replicated via states and triggers.
+
+
+=====================================================
+Version 1.6.4
+=====================================================
+
+Fixes:
+------------
+
+Fixed a potential arguement out of range exception when removing cached tagged objects from the scene.
+Excluded abstract classes from State and Trigger options which would cause null references when added.
+
+
+=====================================================
+Version 1.6.3
+=====================================================
+
+Features:
+------------
+
+Added a selection mode for the beyond and within distance triggers to be able to handle multiple tagged objects (Default, Any, All)
+- Default: (Any for Within, All for Beyond)
+- Any: Any tagged object can be within/beyond distance to be true
+- All: All tagged objects must be within/beyond distance to be true
+
+Added the logical result to the within/beyond triggers when no tagged objects exist
+- Beyond returns true
+- Within returns false
+
+
+Fixes:
+------------
+
+Fixed a typo in the InPlayerViewTrigger where it was using the x coordinate instead of the y
+Fixed a potential null reference exception in the TaggedObjectFinder if a Game Object was destroyed
+
+
+=====================================================
+Version 1.6.2
+=====================================================
+
+Fixes:
+------------
+
+Fixed Global trigger custom tags not being initialized properly
+
+
+=====================================================
+Version 1.6.1
+=====================================================
+
+Changes:
+------------
+
+Reuploaded to the Asset Store using Unity 4.3 instead of 4.3.2 for compatibility reasons
+
+
+=====================================================
+Version 1.6.0
+=====================================================
+
+Features:
+------------
+
+Added a custom tags system for both states and triggers
+
+
+Changes:
+------------
+
+BaseState and BaseTrigger Awake methods are virtual and must be called if overridden
+	- otherwise the tagged objects will not be found when using custom tags
+
+
+Fixes:
+------------
+
+Triggers were not being deleted when being swapped out with another trigger
+
+
+=====================================================
+Version 1.5.1
+=====================================================
+
+Changes:
+------------
+
+Any override for the Trigger method DrawInspectorProperties must now also include AIBehaviors fsm as well
+	Example: public override void DrawInspectorProperties(AIBehaviors fsm, SerializedObject sObject)
+Made the GoToRandomState trigger Editor GUI more useable
+Added the CharacterAnimator component to the Astar setup menu item.
+Changed AI Behaviors to correctly say AI Behavior in the about menu item and window
+
+=====================================================
+Version 1.5.0
+=====================================================
+
+Features:
+------------
+
+Added the ability to filter the within and beyond distance triggers by tagged objects.
+Added the ability to use a separate transform for the AI’s sight.
+
+Fixes:
+------------
+
+Fixed a drawing bug with the attack state.
+
+Changes:
+------------
+
+Made it so the Attack Animations foldout only allows one animation.
+
+
+=====================================================
+Version 1.4.9
+=====================================================
+
+Features:
+------------
+
+Added a menu option for an Astar Pathfinding Project setup
+
+Changes:
+------------
+
+The attack animation for both Legacy animation and Mecanim now use the first animation in the Animations foldout instead of a state specific animation.
+
+
+=====================================================
+Version 1.4.8
+=====================================================
+
+Fixes:
+------------
+
+Rebaked NavMeshes in the example scenes.
+
+
+=====================================================
+Version 1.4.7
+=====================================================
+
+Fixes:
+------------
+
+Updated the Report A Bug menu to exclude the subject because some mail apps would fail to launch if it was there.
+
+
+=====================================================
+Version 1.4.6
+=====================================================
+
+Fixes:
+------------
+
+Ensured certain animations were included in the Asset Store that were causing the Mecanim scenes to break.
+Fixed a bug in the DefendState editor that would allow it to use the callbacks if the component was in a namespace.
+Modded the animations in the AttackState to one since the normalized values now go past 1.0
+The shooter script now uses Camera.main instead of Camera.current since Camera.current is returning null
+Made the shooter start a little farther out so it doesn't hit the player himself.
+
+Changes:
+------------
+
+Updated all State example scenes
+Removed several scenes that were mostly causing clutter
+
+
+=====================================================
+Version 1.4.5
+=====================================================
+
+
+Features:
+-----------
+Added Global Triggers to each AI
+Added a new IsAliveTrigger
+Added Mecanim support
+Added HTML documentation for code and video tutorials
+Added a new demo scene
+
+
+Improvements:
+-----------
+Wrapped all AIBehavior specific classes into namespaces
+
+
+Fixes:
+-----------
+Fixed several menu item issues
+
+
+=====================================================
+Version 1.4.3
+=====================================================
+
+Fixes:
+-----------
+Reverted project to Unity 4.1.5 because the previous release was uploaded with a beta version.
+
+
+=====================================================
+Version 1.4.2
+=====================================================
+
+Fixes:
+-----------
+The Init method on SubTriggers wasn't being called as it should have, producing incorrect results for some triggers such as the Timer trigger.
+
+
+=====================================================
+Version 1.4.1
+=====================================================
+
+*** Now Requires Unity 4 ***
+
+Improvements:
+-----------
+
+Added a target and the attacking state into the AttackData structure.
+Attack is now a virtual method that can be overridden if the AttackState is derived from.
+The Attack state has a new reload system since the old one was broken. Now once it reaches a certain number of attacks it will change to whatever state is chosen. It chooses the attack state it comes from by default until one is chosen.
+There is now some initial ground work for getting Mecanim working.
+
+
+Fixes:
+-----------
+
+Fixed a bug where GetClosestPlayer was using sqrSightDistance instead of sqrDistance.
+Fixed a bug with the animation code sample.
+Added a flag for if a class has movement options or not (for editor code).
+
+
+Changes:
+-----------
+
+Changed the version number to 1.4.1 because adding nested triggers should have been called version 1.4… oops
+
+
+
+=====================================================
+Version 1.3.8
+=====================================================
+
+Improvements:
+-----------
+
+Added a nested triggers system
+
+
+Changes:
+-----------
+
+Updated the Attack state so that it doesn't draw the animations foldout.
+
+
+=====================================================
+Version 1.3.7
+=====================================================
+
+Fixes:
+-----------
+
+Added a null check to make sure there's an animation state to send to the animation callback.
+Added the public keyword to the CodeSampleGUI since you need a method to be public in order to use it.
+Fixed a bug where the "Distance To Target Threshold" for the seek state wasn't being calculated.
+Put DestroyImmediate in edit mode and Destroy when the game is playing for the idle state.
+Dead state now passes the AI's transform instead of its' position so that it won't rotate.
+Fixed a NaN rotation error if the Time.deltaTime value was zero.
+Fixed a Null Reference Exception in the PatrolState if Init is called before Awake.
+Fixed an issue where the agent would rotate toward the player even when in something like the seek state
+
+
+Improvements:
+-----------
+
+Added the scripts from the Unity Example Mecanim scenes and made slight modifications to work with AI Behaviors.
+Added damageMultiplier to the AIBehaviors class so when the GotHit method is called it can take the raw damage value and increase or decrease it.
+Added an overrideable "CanGetHit" method to the GotHit state to see if it can be changed to. This only applies when calling "GotHit" on the main AIBehaviors script.
+Added pitch and optional pitch randomness to the audio when played.
+Added a previousState field to the main AIBehaviors script.
+
+
+Changes:
+-----------
+
+Made the AIBehaviors generic GetState and GetStates methods return derived types instead of just the exact type.
+Can now use an external move delegate in 'addition to' the NavMeshAgent and not 'instead of'.
+The Defend state now locks the player into position when it is running.
+Added SendMessageOptions.DontRequireReceiver to the GetHelpState "OnGetHelp" callback.
+
+
+=====================================================
+Version 1.3.6
+=====================================================
+
+Fixes:
+-----------
+
+Fixed a null reference bug when a nav mesh agent is not present in the GotHit method.
+
+Fixed a bug where triggers were not being deleted when a state was deleted.
+
+
+Changes:
+-----------
+
+Removed Legacy Upgrade system
+
+
+=====================================================
+Version 1.3.5
+=====================================================
+
+Features:
+-----------
+
+Now includes a very basic AI vs AI scene
+
+Added a SetPatrolPoints method to the Patrol state in the form of void SetPatrolPoints(Transform pointsParent)
+
+
+Improvements:
+-----------
+
+Exposed health to the inspector
+
+Added a Change To Tag state
+
+Now, no logic will execute if the time scale is 0
+
+
+Changes:
+-----------
+
+Low Health Trigger now triggers if health is Less Than or Equal to instead of just Less Than
+- most of the time it's used for detecting if the AI died, so naturally a person will probably want to put 0 and not 1
+
+Added a movement call to the GotHit state for the AI to move to its' current position, effectively stopping it
+
+
+
+=====================================================
+Version 1.3.1
+=====================================================
+
+Fixes:
+-----------
+
+Now creates GUI Styles in the OnEnable method instead of in the declaration since it breaks the GUI in Unity 4
+
+Fixed a bug where the AI wouldn't rotate when using a 3rd Party nav system
+
+
+
+=====================================================
+Version 1.3
+=====================================================
+
+Features:
+-----------
+
+Added an all new, easily expandable system where a developer can add new states and triggers easily.
+
+Added an advanced mode so a user can have a basic view or an advanced view while editting.
+
+Added the ability to have multiple instances of any state type.
+
+The current state for the AI is now hilighted green in the editor.
+
+Added a new SpeedExceeded trigger.
+
+Added a new GoToRandomState trigger.
+
+Added KeyUp and KeyDown triggers.
+
+
+Improvements:
+-----------
+
+Added up, down, add and remove button styles.
+
+Added reordering and removal of states.
+
+Added a plus button to add new states to an AI.
+
+Triggers are now seperate classes instead of being embedded into the BaseState class.
+
+Added an InspectorHelper code file that new states and triggers will use by default when creating a new state or trigger from its' skeleton class, respectively.
+
+Updated the GetHelpState to use the other AI's y position for pathfinding.
+
+Implemented generic and type based GetState(s) methods.
+
+Added spacing to make drawing the triggers look better.
+
+Added a new property to the SeekState, destroyTargetWhenReached which will destroy the target that the fsm is seeking when it is reached.
+
+Added ChangeActiveStateByIndex and ChangeActiveStateByName methods.
+
+
+Bugs Fixes:
+-----------
+
+Fixed a bug in the Timer Trigger where it was always returning true.
+
+Updated the vision cone to react and draw properly. It used to be twice the size that it should have been.
+
+Fixed a potential bug that could occur when calling ChangeState if the state passed was null.
+
+The IdleState now has the ai correctly rotated in the direction they entered the idle state in.
+
+Updated the Ranged Attack scene as it wasn't working properly before.
+
+
+Changes:
+-----------
+
+Set the default value of the cooldown time to be 0.
+
+Got rid of the intermediate class StateMachineData.
+
+RangedAttackState and MeleeAttackState are now just instances of AttackState (Do Not Use the RangedAttackState or MeleeAttackState components as they will be removed in a future release).
+
+HealState and SeekAmmoState are now instances of SeekState (Do Not Use the HealState or SeekAmmoState components as they will be removed in a future release).
+
+Renamed SetStates to ReplaceAllStates.
+
+Removed the State enumeration as it's now mostly useless.
+
+Removed a lot of unused code and variables.
+
+
+
+=====================================================
+Version 1.2.1
+=====================================================
+
+
+Features:
+-----------
+
+Added the ability to implement 3rd party path finding systems.
+
+Updated menu to have a non Nav Mesh setup option in case the user decides to use a 3rd party system. Labeled as "AI Behaviors Setup (No Nav Mesh Agent)".
+
+
+
+Improvements:
+-----------
+
+Removed the use of System.Reflection from the runtime code to allow for code stripping on mobile devices.
+
+Renamed the general property "Raycast Layers" to "Visual Obstruction Layers" and added a tooltip for it because it was confusing.
+
+Updated the GUI layout of the FleeState fleeTargetTag to be more consistent with the rest of the layout.
+
+Made getting the current state public.
+
+
+
+Bugs Fixes:
+-----------
+
+Fixed a bug where the animation from the attack slider in the editor would cause the animations to jitter if the attack state was selected.
+
+Fixed the Patrol state's Ping Pong mode since it wasn't working.
+
+Fixed a bug where the attack states weren't using the attack point variable.
+
+
+
+Changes:
+-----------
+
+Changed SeekItemsState to be called SeekStateBase and made it abstract.
+
+There is no more health field component selection since it was using System.Reflection in the runtime.
+
+Removed Character Stats script since it's no longer needed.
