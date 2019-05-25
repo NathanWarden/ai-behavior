@@ -139,7 +139,7 @@ namespace AIBehavior
 				if (floorLayers == (floorLayers | (1 << hit.transform.gameObject.layer))) 
 				{
 					// If exceeding the maxDistance from the anchorPoint, turn to another rotation
-					if (Vector3.Distance(hit.point, anchorPoint.position) > maxDistanceFromAnchor) 
+					if (stayCloseToPoint && Vector3.Distance(hit.point, anchorPoint.position) > maxDistanceFromAnchor)
 					{
 						transform.Rotate(0, 90, 0);
 						newPoint = transform.position;
